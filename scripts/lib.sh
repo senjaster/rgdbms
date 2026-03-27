@@ -29,11 +29,7 @@ comment() {
 # Функция для вывода и выполнения команды
 # Использование: run "команда для выполнения"
 run() {
-    if command -v colorize >/dev/null 2>&1; then
-        echo "$1" | colorize
-    else
-        printf "${COLOR_RUN}+ %s${COLOR_RESET}\n" "$1"
-    fi
+    printf "${COLOR_RUN}+ %s${COLOR_RESET}\n" "$1"
     eval "$1"
 }
 
