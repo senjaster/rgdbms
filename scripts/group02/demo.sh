@@ -105,6 +105,9 @@ UNION ALL
 SELECT \"oorder_compression_off\" as table_name, count(*) as row_count
 FROM \`compression/oorder_compression_off\`'"
 
+comment "Документация по сжатию"
+link "https://ydb.tech/docs/ru/yql/reference/syntax/create_table/family?version=v25.2"
+
 pause
 
 # ============================================
@@ -127,10 +130,3 @@ pause
 # Очистка (без вывода)
 ydb -p default sql -s 'DROP TABLE IF EXISTS `compression/oorder_compression_off`' 2>/dev/null
 ydb -p default sql -s 'DROP TABLE IF EXISTS `compression/oorder_compression_lz4`' 2>/dev/null
-
-# ============================================
-# ЗАВЕРШЕНИЕ
-# ============================================
-
-comment "Демонстрация завершена."
-comment "YDB поддерживает сжатие данных на уровне хранения с различными алгоритмами."
