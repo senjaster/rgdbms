@@ -67,4 +67,7 @@ pause
 comment "Документация по развертыванию:"
 link "https://ydb.tech/docs/ru/devops/deployment-options/ansible/initial-deployment?version=v25.2"
 
+comment "Документация по обновлению:"
+link "https://ydb.tech/docs/ru/devops/deployment-options/ansible/update-executable?version=v25.2"
+
 
