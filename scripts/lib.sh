@@ -46,10 +46,9 @@ pause() {
     echo ""
 }
 
-# Функция для вывода текста как гиперссылки (OSC 8)
-# Использование: link "текст" "url"
+# Функция для вывода URL в подчеркнутом magenta цвете
+# Использование: link "url"
 link() {
-    local text="$1"
-    local url="$2"
-    printf "\033]8;;%s\033\\${COLOR_LINK}${UNDERLINE}%s${COLOR_RESET}\033]8;;\033\\\n" "$url" "$text"
+    local url="$1"
+    printf "${COLOR_LINK}${UNDERLINE}%s${COLOR_RESET}\n" "$url"
 }
