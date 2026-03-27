@@ -14,7 +14,7 @@ comment "КРИТЕРИЙ 20. Возможность графического п
 
 comment "Выполним запрос с помощью WebUI"
 echo "
-SELECT count(*) as customer_count`
+SELECT count(*) as customer_count
 FROM    
     warehouse AS w
     INNER JOIN district AS d
