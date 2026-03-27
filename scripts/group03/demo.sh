@@ -14,7 +14,7 @@ comment "КРИТЕРИЙ 20. Возможность графического п
 
 comment "Выполним запрос с помощью WebUI"
 echo "
-SELECT count(*)
+SELECT count(*) as customer_count`
 FROM    
     warehouse AS w
     INNER JOIN district AS d
@@ -33,6 +33,6 @@ pause
 
 comment "КРИТЕРИЙ 21. Возможность просмотра информации о структуре и размерах БД, объектах БД"
 
-:link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&queryTab=history&diagnosticsTab=overview&summaryTab=schema&database=%2FRoot%2Fdatabase&queryMode=running&schema=%2FRoot%2Fdatabase%2Foorder"
+link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&queryTab=history&diagnosticsTab=overview&summaryTab=schema&database=%2FRoot%2Fdatabase&queryMode=running&schema=%2FRoot%2Fdatabase%2Foorder"
 
 pause
