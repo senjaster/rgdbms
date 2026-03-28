@@ -5,6 +5,83 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 export YDB_PASSWORD=PASSw0rd!!!
 
+
+# ============================================
+# КРИТЕРИЙ 61: Поддержка многоузловых транзакций
+# ============================================
+
+header "КРИТЕРИЙ 61: Поддержка многоузловых транзакций"
+
+comment "YDB поддерживает распределенные транзакции, которые могут изменять данные в разных партициях,"
+comment "которые размещены на разных узлах"
+comment "Создадим таблицу с двумя партициями и продемонстрируем транзакцию, изменяющую данные в обеих."
+comment ""
+comment "Создадим таблицу с ключом типа Uint32 и полем value типа Int32:"
+comment "Партиции будут разделены по ключу 20 (PARTITION_AT_KEYS)"
+
+pause
+
+run "ydb -p default sql -s 'CREATE TABLE \`/Root/database/test_distributed_txn\` (
+    id Uint32 NOT NULL,
+    value Int32,
+    PRIMARY KEY (id)
+)
+WITH (
+    PARTITION_AT_KEYS = (20),
+    AUTO_PARTITIONING_BY_LOAD = DISABLED,
+    AUTO_PARTITIONING_BY_SIZE = DISABLED
+)'"
+
+pause
+
+comment "Добавим две строки: одну в первую партицию (id=10), другую во вторую (id=30):"
+
+run "ydb -p default sql -s 'INSERT INTO \`/Root/database/test_distributed_txn\` (id, value) VALUES (10, 100), (30, 100)'"
+
+pause
+
+comment "Проверим начальное состояние:"
+
+run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+
+pause
+
+comment "Запустим в фоне многоузловые транзакции с помощью ydb-bench:"
+comment "Каждая транзакция будет увеличивать значение в строке 10 на 1 и уменьшать в строке 30 на 1"
+comment "Сумма должна оставаться неизменной (200), что подтверждает атомарность транзакций"
+
+run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --scale 1 run --jobs 1 --transactions 1000 --file ${SCRIPT_DIR}/multi_partition_txn.sql &"
+WORKLOAD_PID=$!
+
+comment "Workload запущен с PID: $WORKLOAD_PID"
+comment "Ожидаем 2 секунды..."
+sleep 2
+
+pause
+
+comment "Во время выполнения транзакций проверим сумму значений:"
+comment "Она должна оставаться равной 200, несмотря на параллельные изменения"
+
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+
+pause
+
+comment "Подождем завершения workload и проверим финальное состояние:"
+
+wait $WORKLOAD_PID 2>/dev/null
+
+run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+
+comment "Сумма осталась равной 200, что подтверждает корректную работу распределенных транзакций"
+
+pause
+
+comment "Удалим тестовую таблицу"
+ydb -p default sql -s 'DROP TABLE `/Root/database/test_distributed_txn`' 2>/dev/null
+
+
 # ============================================
 # КРИТЕРИЙ 55: Наличие механизма балансировки читающей нагрузки
 # ============================================
@@ -55,80 +132,3 @@ comment "Остановим фоновый процесс workload"
 
 kill $WORKLOAD_PID 2>/dev/null || echo "Процесс уже завершился сам"
 wait $WORKLOAD_PID 2>/dev/null
-
-pause
-
-# ============================================
-# КРИТЕРИЙ 61: Поддержка многоузловых транзакций
-# ============================================
-
-header "КРИТЕРИЙ 61: Поддержка многоузловых транзакций"
-
-comment "YDB поддерживает распределенные транзакции, которые могут изменять данные в разных партициях,"
-comment "которые размещены на разных узлах"
-comment "Создадим таблицу с двумя партициями и продемонстрируем транзакцию, изменяющую данные в обеих."
-comment ""
-comment "Создадим таблицу с ключом типа Uint32 и полем value типа Int32:"
-comment "Партиции будут разделены по ключу 20 (PARTITION_AT_KEYS)"
-
-pause
-
-run "ydb -p default sql -s 'CREATE TABLE \`/Root/database/test_distributed_txn\` (
-    id Uint32 NOT NULL,
-    value Int32,
-    PRIMARY KEY (id)
-)
-WITH (
-    PARTITION_AT_KEYS = (20),
-    AUTO_PARTITIONING_BY_LOAD = DISABLED,
-    AUTO_PARTITIONING_BY_SIZE = DISABLED
-)'"
-
-pause
-
-comment "Добавим две строки: одну в первую партицию (id=10), другую во вторую (id=30):"
-
-run "ydb -p default sql -s 'INSERT INTO \`/Root/database/test_distributed_txn\` (id, value) VALUES (10, 100), (30, 100)'"
-
-pause
-
-comment "Проверим начальное состояние:"
-
-run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
-
-pause
-
-comment "Запустим в фоне многоузловые транзакции с помощью ydb-bench:"
-comment "Каждая транзакция будет увеличивать значение в строке 10 на 1 и уменьшать в строке 30 на 1"
-comment "Сумма должна оставаться неизменной (200), что подтверждает атомарность транзакций"
-
-run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --prefix-path \"\" --scale 1 run --jobs 1 --transactions 1000 --file ${SCRIPT_DIR}/multi_partition_txn.sql &"
-WORKLOAD_PID=$!
-
-comment "Workload запущен с PID: $WORKLOAD_PID"
-comment "Ожидаем 2 секунды..."
-sleep 2
-
-pause
-
-comment "Во время выполнения транзакций проверим сумму значений:"
-comment "Она должна оставаться равной 200, несмотря на параллельные изменения"
-
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
-
-pause
-
-comment "Подождем завершения workload и проверим финальное состояние:"
-
-wait $WORKLOAD_PID 2>/dev/null
-
-run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
-
-comment "Сумма осталась равной 200, что подтверждает корректную работу распределенных транзакций"
-
-pause
-
-comment "Удалим тестовую таблицу"
-ydb -p default sql -s 'DROP TABLE `/Root/database/test_distributed_txn`' 2>/dev/null
