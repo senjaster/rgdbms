@@ -60,7 +60,7 @@ run "ydb -p default sql -s 'CREATE TABLE auto_partition_demo (
 )
 WITH (
     AUTO_PARTITIONING_BY_SIZE = ENABLED,
-    AUTO_PARTITIONING_PARTITION_SIZE_MB = 10
+    AUTO_PARTITIONING_PARTITION_SIZE_MB = 1
 )'"
 
 pause
