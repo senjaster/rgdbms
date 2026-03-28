@@ -18,7 +18,7 @@ comment "Используем утилиту ydb-bench для генерации
 comment "Создадим таблицы и заполним их данными."
 pause
 
-run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --password \"\$YDB_PASSWORD\" --prefix-path pgbench init --scale 100"
+run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --password \"\$YDB_PASSWORD\" --prefix-path bench --scale 100 init"
 
 comment "Проверим текущее распределение активных сессий по узлам кластера:"
 
@@ -32,7 +32,7 @@ pause
 comment "Запустим 30 параллельных читающих запросов в фоновом режиме:"
 comment "Используем встроенный workload tpcb-like с 30 jobs"
 
-run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --prefix-path pgbench run --jobs 30 --transactions 1000 &"
+run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --prefix-path bench --scale 100 run --jobs 30 --transactions 1000 &"
 WORKLOAD_PID=$!
 
 comment "Workload запущен с PID: $WORKLOAD_PID"
