@@ -58,7 +58,7 @@ pause
 
 
 comment "Теперь выдадим права группе ydb_role1 в которую он входит"
-run "ydb -p default --user root sql -s \'GRANT SELECT ON `/Root/database/item` TO `cn=ydb_role1,ou=groups,dc=ydb-cluster,dc=com@ldap`\'"
+run "ydb -p default --user root sql -s 'GRANT SELECT ON \`/Root/database/item\` TO \`cn=ydb_role1,ou=groups,dc=ydb-cluster,dc=com@ldap\`'"
 pause
 
 comment "Запустим запрос повторно:"
