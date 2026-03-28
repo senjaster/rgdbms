@@ -66,38 +66,20 @@ WITH (
 pause
 
 comment "Добавим 10 строк с длинным payload"
-run "ydb -p default sql -s 'INSERT INTO auto_partition_demo (id, payload)
-VALUES
-    (1, \"AAAAAAAAAA\"),
-    (2, \"BBBBBBBBBB\"),
-    (3, \"CCCCCCCCCC\"),
-    (4, \"DDDDDDDDDD\"),
-    (5, \"EEEEEEEEEE\"),
-    (6, \"FFFFFFFFFF\"),
-    (7, \"GGGGGGGGGG\"),
-    (8, \"HHHHHHHHHH\"),
-    (9, \"IIIIIIIIII\"),
-    (10, \"JJJJJJJJJJ\")'"
-
-pause
-
-comment "Проверим начальное состояние - размер и количество партиций"
-run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) as total_rows, sum(DataSize) as total_size_bytes FROM \`.sys/partition_stats\` WHERE Path LIKE \"%auto_partition_demo%\" GROUP BY Path ORDER BY Path'"
-
-pause
-
-comment "Размножим строки с помощью CROSS JOIN (10 * 10 = 100 строк)"
 run "ydb -p default sql -s '
-REPLACE INTO auto_partition_demo (id, payload)
+\$maxid = SELECT max(id) FROM auto_partition_demo;
+
+INSERT INTO auto_partition_demo(id, payload)
 SELECT 
-    unwrap(t1.id * 10 + t2.id) as id, t1.payload as payload
-FROM auto_partition_demo AS t1
-CROSS JOIN (SELECT * FROM auto_partition_demo WHERE id <= 10) AS t2
+    unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + \$maxid) as id,
+    \'AAAAAAAAAA\' as payload
+FROM 
+    item
 '"
 
 pause
 
-comment "Проверим состояние после первого размножения"
+comment "Проверим начальное состояние - размер и количество партиций"
 run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) as total_rows, sum(DataSize) as total_size_bytes FROM \`.sys/partition_stats\` WHERE Path LIKE \"%auto_partition_demo%\" GROUP BY Path ORDER BY Path'"
 
 pause
