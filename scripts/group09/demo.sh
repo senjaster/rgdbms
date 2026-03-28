@@ -50,6 +50,7 @@ run "ydb -p default --user testuser sql -s 'SELECT * FROM \`/Root/database/folde
 pause
 
 ################################################################################################
+header "Выдача прав на папку"
 
 comment "YDB позволяет выдать права на папку - все содежимое унаследует права:"
 
@@ -66,7 +67,7 @@ run "ydb -p default sql -s 'REVOKE ALL ON \`/Root/database/folder1\` FROM testus
 pause
 
 ################################################################################################
-
+header "WITH GRANT OPTION"
 
 comment "Выдадим права с опцией WITH GRANT OPTION:"
 
@@ -112,7 +113,7 @@ ydb -p default sql -s 'DROP USER IF EXISTS testuser2' 2>/dev/null
 ydb -p default sql -s 'DROP USER IF EXISTS testuser3' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS readers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS writers' 2>/dev/null
-ydb -p default sql -s 'DROP GROUP IF EXISTS all_users' 2>/dev/null
+ydb -p default sql -s 'DROP GROUP IF EXISTS allusers' 2>/dev/null
 ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/test_table`' 2>/dev/null
 
 comment "Создадим пользователей и таблицу:"
@@ -135,7 +136,7 @@ run "ydb -p default sql -s 'CREATE GROUP readers'"
 
 run "ydb -p default sql -s 'CREATE GROUP writers'"
 
-run "ydb -p default sql -s 'CREATE GROUP all_users'"
+run "ydb -p default sql -s 'CREATE GROUP allusers'"
 
 pause
 
@@ -200,15 +201,15 @@ run "ydb -p default --user testuser2 sql -s 'INSERT INTO \`/Root/database/folder
 pause
 
 comment "Вложенные роли (группа в группе):"
-comment "Создаем группу all_users, которая включает группы readers и writers:"
+comment "Создаем группу allusers, которая включает группы readers и writers:"
 
-run "ydb -p default sql -s 'ALTER GROUP all_users ADD GROUP readers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD GROUP readers'"
 
-run "ydb -p default sql -s 'ALTER GROUP all_users ADD GROUP writers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD GROUP writers'"
 
-comment "Добавляем testuser3 в группу all_users:"
+comment "Добавляем testuser3 в группу allusers:"
 
-run "ydb -p default sql -s 'ALTER GROUP all_users ADD USER testuser3'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD USER testuser3'"
 
 comment "testuser3 наследует права обеих групп (readers и writers):"
 
@@ -232,7 +233,7 @@ pause
 # Очистка
 ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM GROUP readers' 2>/dev/null
 ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM GROUP writers' 2>/dev/null
-ydb -p default sql -s 'DROP GROUP IF EXISTS all_users' 2>/dev/null
+ydb -p default sql -s 'DROP GROUP IF EXISTS allusers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS readers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS writers' 2>/dev/null
 ydb -p default sql -s 'DROP USER IF EXISTS testuser' 2>/dev/null
