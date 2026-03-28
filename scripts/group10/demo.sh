@@ -84,7 +84,7 @@ comment ""
 comment "Проверим с помощью netstat, к какому хосту установлено соединение:"
 pause
 
-run "netstat -antp | grep 2137"
+run "netstat -antp | grep 2137 | grep ESTABLISHED"
 comment "Видно, что соединение установлено не к yandex-ydb-1"
 pkill -f "SELECT count.*FROM item"
 pause
@@ -100,6 +100,8 @@ comment ""
 comment "Остановим процесс хранения на первом узле"
 pause
 run "ssh yandex-ydb-1 sudo systemctl stop ydbd-storage"
+run "ydb -p default -d /Root sql -s 'SELECT NodeId, Host FROM \`.sys/nodes\`'"
+
 comment "Сейчас мы фактически сымитировали полную недоступность одного из узлов кластера"
 comment ""
 comment "Попробуем подключиться:"
@@ -129,6 +131,8 @@ pause
 
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
+run "ydb -p default -d /Root sql -s 'SELECT NodeId, Host FROM \`.sys/nodes\`'"
+
 
 comment "Давайте посмотрим, как это выглядит на практике:"
 comment "Запустим тест tpc-c, встроеный в YDB"
