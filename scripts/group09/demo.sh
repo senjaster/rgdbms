@@ -134,8 +134,6 @@ run "ydb -p default sql -s 'CREATE GROUP readers'"
 
 run "ydb -p default sql -s 'CREATE GROUP writers'"
 
-run "ydb -p default sql -s 'CREATE GROUP allusers'"
-
 pause
 
 comment "Назначим права группам:"
@@ -200,9 +198,8 @@ pause
 
 comment "Вложенные роли (группа в группе):"
 comment "Создаем группу allusers, которая включает группы readers и writers:"
-
+run "ydb -p default sql -s 'CREATE GROUP allusers'"
 run "ydb -p default sql -s 'ALTER GROUP readers ADD USER allusers'"
-
 run "ydb -p default sql -s 'ALTER GROUP writers ADD USER allusers'"
 
 comment "Добавляем testuser3 в группу allusers:"
@@ -223,10 +220,6 @@ comment "Документация по управлению доступом:"
 comment ""
 
 link "https://ydb.tech/docs/ru/security/access-management?version=v25.2"
-
-comment ""
-
-pause
 
 # Очистка
 ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM readers' 2>/dev/null
