@@ -16,9 +16,6 @@ header "КРИТЕРИЙ 44: Наличие в поставке инструме
 comment "YDB всегда представляет собой отказоустойчивый кластер."
 comment "Все узлы кластера являются активными (active-active), что обеспечивает высокую доступность и производительность."
 comment ""
-comment "Существует возможность создать "одноузловой кластер без отказоустойчивости", но это опция "
-comment "ТОЛЬКО для разработки и проведения тестов, например в докер-контейнерах."
-
 comment "Давайте посмотрим документацию по поддерживаемым топологиям кластера"
 link "https://ydb.tech/docs/ru/concepts/topology?version=v25.2"
 pause
@@ -30,6 +27,31 @@ less -p  mirror-3-dc  ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 
 comment "Для примера посмотрим, как узлы кластера видят друг друга"
 link "https://10.40.13.21:8765/actors/interconnect/overview"
+pause
+
+comment "Проверим что кластер является отказоустойчивым - выключим один из узлов"
+comment "Сначала выполним простой запрос для проверки работоспособности:"
+pause
+
+run "ydb -p default sql -s 'SELECT count(*) FROM item'"
+pause
+
+comment "Теперь остановим один из узлов кластера:"
+run "ssh yandex-ydb-2 sudo systemctl stop ydbd-storage"
+run "ssh yandex-ydb-2 sudo systemctl stop ydbd-database-a"
+
+pause
+
+comment "Проверим, что кластер продолжает работать несмотря на отключение узла:"
+run "ydb -p default sql -s 'SELECT count(*) FROM item'"
+comment "Отключать второй узел уже нельзя - мы выйдем за модель отказа"
+pause
+
+comment "Запустим узел обратно:"
+run "ssh yandex-ydb-2 sudo systemctl start ydbd-storage"
+run "ssh yandex-ydb-2 sudo systemctl start ydbd-database-a"
+
+pause
 
 # ============================================
 # КРИТЕРИЙ 56: Возможность проксирования запросов на активный узел
