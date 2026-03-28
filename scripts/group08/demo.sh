@@ -37,6 +37,10 @@ run "ydb -p default --user root sql -s \"ALTER GROUP testgroup ADD USER testaudi
 
 run "ydb -p default --user root sql -s \"CREATE TABLE testaudit_table (id Int32, name Utf8, PRIMARY KEY (id))\""
 
+run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`testaudit_table\\\` TO testgroup\""
+
+run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`testaudit_table\\\` FROM testgroup\""
+
 run "ydb -p default --user root sql -s \"DROP TABLE testaudit_table\""
 
 run "ydb -p default --user root sql -s \"DROP GROUP testgroup\""
@@ -56,7 +60,7 @@ pause
 header "КРИТЕРИЙ 34: Возможность хранения журнала аудита в выделенном файле"
 
 comment "YDB сохраняет журнал аудита в выделенный файл."
-comment "Проверим записи в журнале аудита о созданном пользователе testaudit:"
+comment "Проверим записи в журнале аудита:"
 comment ""
 run "ssh user@yandex-ydb-1 sudo ls -l /var/log/ydb/"
 comment "Каждый из узлов содержит по два файла - для процесса хранения и для процесса БД"
@@ -65,8 +69,8 @@ comment "Посмотрим что внутри:"
 pause
 
 run "for node in yandex-ydb-1 yandex-ydb-2 yandex-ydb-3; do
-    ssh user@\$node sudo grep testaudit /var/log/ydb/ydb-audit-storage.log 2>/dev/null
-    ssh user@\$node sudo grep testaudit /var/log/ydb/ydb-audit-db.log 2>/dev/null
+    ssh user@\$node sudo cat /var/log/ydb/ydb-audit-storage.log 2>/dev/null
+    ssh user@\$node sudo cat /var/log/ydb/ydb-audit-db.log 2>/dev/null
 done | sort"
 
 pause
