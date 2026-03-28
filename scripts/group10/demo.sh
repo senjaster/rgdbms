@@ -130,7 +130,7 @@ pause
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
 
-comment "Давайте посмотрим, как это выгляди на практике:"
+comment "Давайте посмотрим, как это выглядит на практике:"
 comment "Запустим тест tpc-c, встроеный в YDB"
 pause
 
