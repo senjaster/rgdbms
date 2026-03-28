@@ -53,29 +53,12 @@ ydb -p default sql -s 'DROP TABLE IF EXISTS auto_partition_demo' 2>/dev/null
 
 comment "Создадим таблицу с автоматическим разбиением по размеру"
 comment "Разбиение будет происходить при достижении 10МБ"
-run "ydb -p default sql -s 'CREATE TABLE auto_partition_demo (
-    id Uint64,
-    payload String,
-    PRIMARY KEY (id)
-)
-WITH (
-    AUTO_PARTITIONING_BY_SIZE = ENABLED,
-    AUTO_PARTITIONING_PARTITION_SIZE_MB = 1
-)'"
+run "ydb -p default sql -s 'CREATE TABLE auto_partition_demo (id Uint64, payload String, PRIMARY KEY (id)) WITH (AUTO_PARTITIONING_BY_SIZE = ENABLED, AUTO_PARTITIONING_PARTITION_SIZE_MB = 1)'"
 
 pause
 
 comment "Добавим 10 строк с длинным payload"
-run "ydb -p default sql -s '
-\$maxid = SELECT max(id) FROM auto_partition_demo;
-
-INSERT INTO auto_partition_demo(id, payload)
-SELECT 
-    unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + \$maxid) as id,
-    \'AAAAAAAAAA\' as payload
-FROM 
-    item
-'"
+run "ydb -p default sql -s '\$maxid = SELECT max(id) FROM auto_partition_demo; INSERT INTO auto_partition_demo(id, payload) SELECT unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + \$maxid) as id, \"AAAAAAAAAA\" as payload FROM item'"
 
 pause
 
