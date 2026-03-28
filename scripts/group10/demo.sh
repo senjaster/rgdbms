@@ -36,10 +36,9 @@ comment "Теперь остановим один из узлов кластер
 run "ssh yandex-ydb-2 sudo systemctl stop ydbd-storage"
 run "ssh yandex-ydb-2 sudo systemctl stop ydbd-database-a"
 
-pause
-
+sleep 2
 comment "Посмотрим статус узлов кластера:"
-run "ydb -p default -d /Root sql -s 'SELECT * FROM \`.sys/nodes\`'"
+run "ydb -p default -d /Root sql -s 'SELECT NodeId, Host FROM \`.sys/nodes\`'"
 pause
 
 comment "Проверим, что кластер продолжает работать несмотря на отключение узла:"
