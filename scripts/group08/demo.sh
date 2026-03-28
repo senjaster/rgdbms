@@ -26,7 +26,7 @@ pause
 
 # Очистка
 ydb -p default --user root sql -s "DROP USER IF EXISTS testaudit" 2>/dev/null
-ydb -p default --user root sql -s "DROP TABLE IF EXISTS testaudit_table" 2>/dev/null
+ydb -p default --user root sql -s "DROP TABLE IF EXISTS testaudittable" 2>/dev/null
 ydb -p default --user root sql -s "DROP GROUP IF EXISTS testauditgroup" 2>/dev/null
 
 run "ydb -p default --user root sql -s \"CREATE USER testaudit PASSWORD 'PASSw0rd!!!'\""
@@ -35,13 +35,13 @@ run "ydb -p default --user root sql -s \"CREATE GROUP testauditgroup\""
 
 run "ydb -p default --user root sql -s \"ALTER GROUP testauditgroup ADD USER testaudit\""
 
-run "ydb -p default --user root sql -s \"CREATE TABLE testaudit_table (id Int32, name Utf8, PRIMARY KEY (id))\""
+run "ydb -p default --user root sql -s \"CREATE TABLE testaudittable (id Int32, name Utf8, PRIMARY KEY (id))\""
 
-run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`\Root\\database\\testaudit_table\\\` TO testauditgroup\""
+run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`\Root\\database\\testaudittable\\\` TO testauditgroup\""
 
-run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`\Root\\database\\testaudit_table\\\` FROM testauditgroup\""
+run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`\Root\\database\\testaudittable\\\` FROM testauditgroup\""
 
-run "ydb -p default --user root sql -s \"DROP TABLE testaudit_table\""
+run "ydb -p default --user root sql -s \"DROP TABLE testaudittable\""
 
 run "ydb -p default --user root sql -s \"DROP GROUP testauditgroup\""
 
@@ -77,9 +77,7 @@ for node in yandex-ydb-1 yandex-ydb-2 yandex-ydb-3; do
     ssh user@$node sudo cat /var/log/ydb/ydb-audit-db.log 2>/dev/null
 done | sort > "$TMPFILE"
 
-pause
-
-less -p testaudit "$TMPFILE"
+less -p 'testaudit[a-z]*' +G "$TMPFILE"
 
 rm -f "$TMPFILE"
 
