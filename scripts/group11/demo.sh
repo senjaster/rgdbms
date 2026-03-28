@@ -110,7 +110,9 @@ pause
 # ============================================
 
 header "КРИТЕРИЙ 51: Наличие в поставке инструментов, позволяющих выполнять резервное копирование и восстановление на S3"
-
+comment "Поскольку YDB это как правило кластер, содержащий большой объем данных именно S3"
+comment "рассматривается как основной способ резервного копирования."
+comment ""
 # Конфигурация S3
 S3_ENDPOINT="http://10.40.13.20:9000"
 S3_BUCKET="ydb-backup"
@@ -120,6 +122,7 @@ S3_EXPORT_PREFIX="ydb_export_demo"
 
 comment "Выгрузим обе таблицы в S3:"
 comment "Export Path: $S3_EXPORT_PREFIX/both_tables"
+pause
 
 run "ydb -p default export s3 \
   --s3-endpoint \"$S3_ENDPOINT\" \
@@ -130,8 +133,7 @@ run "ydb -p default export s3 \
   --item src=/Root/database/folder1/subfolder2/orders,dst=\"$S3_EXPORT_PREFIX/both_tables/orders\" \
   --description \"Выгрузка обеих таблиц\""
 
-pause
-
+comment ""
 comment "Бэкап в S3 выполняется сервером без участия клиентского приложения, и может занимать много времени"
 comment "поэтому в ydb есть понятие фоновых операций и способ посмотреть что там происходит."
 comment ""
@@ -183,25 +185,11 @@ pause
 # ============================================
 
 header "КРИТЕРИЙ 52: Восстановление из резервной копии отдельной БД"
+comment "В YDB нет специального понятия "бэкап базы" - любое подмножество таблиц, принадлежащих БД"
+comment "можно включить в резервную копию. 
+comment "Как один из частныз случаев можно включить и все табилцы."
 
-comment "Удалим только таблицу customers:"
-
-run "ydb -p default sql -s 'DROP TABLE \`/Root/database/folder1/subfolder2/customers\`'"
-
-pause
-
-comment "Восстановим только таблицу customers из локальной резервной копии:"
-
-run "ydb -p default tools restore -p /Root/database/folder1/subfolder2/customers -i ./backup_demo/customers"
-
-pause
-
-comment "Проверим восстановленные данные:"
-
-run "ydb -p default sql -s 'SELECT * FROM \`/Root/database/folder1/subfolder2/customers\`'"
-
-pause
-
+link "https://ydb.tech/docs/ru/reference/ydb-cli/export-import/tools-dump?version=v25.2"
 # Очистка (без вывода)
 ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/customers`' 2>/dev/null
 ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/orders`' 2>/dev/null
