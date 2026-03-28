@@ -32,7 +32,6 @@ comment "Просмотрим конфигурационный файл:"
 pause
 
 less -p account_lockout: ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
-pause
 
 comment "Создадим тестового пользователя:"
 comment ""
