@@ -201,9 +201,9 @@ pause
 comment "Вложенные роли (группа в группе):"
 comment "Создаем группу allusers, которая включает группы readers и writers:"
 
-run "ydb -p default sql -s 'ALTER GROUP allusers ADD readers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD USER readers'"
 
-run "ydb -p default sql -s 'ALTER GROUP allusers ADD writers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD USER writers'"
 
 comment "Добавляем testuser3 в группу allusers:"
 
