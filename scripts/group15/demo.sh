@@ -58,7 +58,7 @@ run "ydb -p default sql -s 'CREATE TABLE auto_partition_demo (id Uint64, payload
 pause
 
 comment "Добавим 10 строк с длинным payload"
-run "ydb -p default sql -s '\$maxid = SELECT max(id) FROM auto_partition_demo; INSERT INTO auto_partition_demo(id, payload) SELECT unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + \$maxid) as id, \"AAAAAAAAAA\" as payload FROM item'"
+run "ydb -p default sql -s '\$maxid = SELECT max(id) FROM auto_partition_demo; INSERT INTO auto_partition_demo(id, payload) SELECT unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + COALESCE(\$maxid,0)) as id, \"AAAAAAAAAA\" as payload FROM item'"
 
 pause
 
