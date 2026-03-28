@@ -87,19 +87,6 @@ run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) a
 pause
 
 comment "Размножим строки с помощью CROSS JOIN (10 * 10 = 100 строк)"
-run "ydb -p default sql -s 'INSERT INTO auto_partition_demo (id, payload)
-SELECT t1.id * 100 + t2.id as id, t1.payload
-FROM auto_partition_demo AS t1
-CROSS JOIN (SELECT id FROM auto_partition_demo WHERE id <= 10) AS t2'"
-
-pause
-
-comment "Проверим состояние после первого размножения"
-run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) as total_rows, sum(DataSize) as total_size_bytes FROM \`.sys/partition_stats\` WHERE Path LIKE \"%auto_partition_demo%\" GROUP BY Path ORDER BY Path'"
-
-pause
-
-comment "Размножим строки еще раз (110 * 10 = 1100 строк)"
 run "ydb -p default sql -s '
 REPLACE INTO auto_partition_demo (id, payload)
 SELECT 
@@ -110,7 +97,7 @@ CROSS JOIN (SELECT * FROM auto_partition_demo WHERE id <= 10) AS t2
 
 pause
 
-comment "Проверим состояние после второго размножения"
+comment "Проверим состояние после первого размножения"
 run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) as total_rows, sum(DataSize) as total_size_bytes FROM \`.sys/partition_stats\` WHERE Path LIKE \"%auto_partition_demo%\" GROUP BY Path ORDER BY Path'"
 
 pause
