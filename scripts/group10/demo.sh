@@ -25,10 +25,6 @@ pause
 less -p hosts:  ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 less -p  mirror-3-dc  ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 
-comment "Для примера посмотрим, как узлы кластера видят друг друга"
-link "https://10.40.13.21:8765/actors/interconnect/overview"
-pause
-
 comment "Проверим что кластер является отказоустойчивым - выключим один из узлов"
 comment "Сначала выполним простой запрос для проверки работоспособности:"
 pause
@@ -40,6 +36,10 @@ comment "Теперь остановим один из узлов кластер
 run "ssh yandex-ydb-2 sudo systemctl stop ydbd-storage"
 run "ssh yandex-ydb-2 sudo systemctl stop ydbd-database-a"
 
+pause
+
+comment "Посмотрим статус узлов кластера:"
+run "ydb -p default -d /Root sql -s 'SELECT * FROM \`.sys/nodes\`'"
 pause
 
 comment "Проверим, что кластер продолжает работать несмотря на отключение узла:"
