@@ -61,6 +61,8 @@ pkill -f "SELECT count.*FROM item"
 pause
 
 # ============================================
+# КРИТЕРИЙ 45: Автоматическое переключение на резервный узел
+# ============================================
 
 header "КРИТЕРИЙ 45: Автоматическое переключение на резервный узел"
 
@@ -70,12 +72,43 @@ pause
 run "ssh yandex-ydb-1 sudo systemctl stop ydbd-storage"
 comment "Сейчас мы фактически сымитировали полную недоступность одного из узлов кластера"
 comment ""
-comment "Выполним discovery еще раз"
+comment "Попробуем подключиться:"
 pause
 
 run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2135 discovery list"
+comment "Процесс остановлен, поэтому подключиться не получается"
+comment ""
+comment "Есть два способа решить эту проблему:"
+comment "  - Прокси. Поскольку используется обычный GRPC(S) подойдет любой, поддерживающий этот протокол"
+comment "  - DNS имя с несколькими IP"
+comment ""
+comment "Выполним dig:"
+pause
+
+run "dig entrypoint.ydb-cluster.com"
+comment ""
+comment "Попробуем подключиться:"
+pause
 
 run "ydb -p default -e grpcs://entrypoint.ydb-cluster.com:2135 discovery list"
+comment "SDK автоматически пробует все IP пока не найдет работающий"
+comment ""
+comment "Запустим обратно остановленный узел"
 
-ssh yandex-ydb-1 sudo systemctl start ydbd-storage
-ssh yandex-ydb-1 sudo systemctl start ydbd-database-a
+pause
+
+run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
+run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
+
+comment "Давайте посмотрим, как это выгляди на практике"
+comment "Запустим тест tpc-c, встроеный в YDB"
+pause
+
+ydb -p default -e grpcs://entrypoint.ydb-cluster.com workload tpcc run -w 100
+
+comment "Запустим обратно остановленный узел"
+
+pause
+
+run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
+run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
