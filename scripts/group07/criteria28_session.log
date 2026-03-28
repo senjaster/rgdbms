@@ -1,0 +1,103 @@
+Script started on 2026-03-24 17:25:56+03:00 [TERM="tmux-256color" TTY="/dev/pts/5" COLUMNS="164" LINES="56"]
+[?2004h[[1;32muser@yandex-client-1[m 28][33;1m$ [mydb - [Kp default --user root
+[?2004lWelcome to YDB CLI [1m2.28.0[22;39m interactive mode (YDB Server [1m25.2.1.ent.4[22;39m)
+[1mHotkeys:[22;39m
+  [1mUp and Down arrow keys[22;39m: navigate through query history.
+  [1mTAB[22;39m: complete the current word based on YQL syntax.
+  [1mCtrl+R[22;39m: search for a query in history containing a specified substring.
+  [1mCtrl+D[22;39m: exit interactive mode.
+
+[?2004h[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[10GC[0m[J[11G[10GC[0m[J
+         [0;90mCOMMIT[0m
+         [0;90mCREATE[0m[2A[11G[10GCR[0m[J[12G[10GCRE[0m[J[13G[10GCRE[0m[J[0;90mATE[0m[13G[10GCREA[0m[J[14G[10GCREA[0m[J[0;90mTE[0m[14G[10GCREAT[0m[J[15G[10GCREAT[0m[J[0;90mE[0m[15G[10G[0;22;34mCREATE[0m[J[16G[10G[0;22;34mCREATE[0m[J[16G[10G[0;22;34mCREATE[0m [0m[J[17G[10G[0;22;34mCREATE[0m [0m[J
+                [0;90mGROUP[0m
+                [0;90mOR REPLACE[0m
+                [0;90mTABLE[0m
+                [0;90mTOPIC[0m[4A[17G[10G[0;22;34mCREATE[0m U[0m[J[18G[10G[0;22;34mCREATE[0m US[0m[J[19G[10G[0;22;34mCREATE[0m US[0m[J[0;90mER[0m[19G[10G[0;22;34mCREATE[0m [0;22;34mUSE[0m[J[20G[10G[0;22;34mCREATE[0m [0;22;34mUSE[0m[J[0;90mR[0m[20G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m[J[21G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m[J[21G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m [0m[J[22G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m [0m[J[22G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m t[0m[J[23G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m t[0m[J[23G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m te[0m[J[24G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m te[0m[J[24G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m tes[0m[J[25G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m tes[0m[J[25G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test[0m[J[26G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test[0m[J[26G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1[0m[J[27G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1[0m[J[27G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0m[J[28G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0m[J
+                           [0;90mLOGIN[0m
+                           [0;90mHASH[0m
+                           [0;90mPASSWORD[0m
+                           [0;90mENCRYPTED[0m[4A[28G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 P[0m[J[29G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 P[0m[J[0;90mASSWORD[0m[29G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PA[0m[J[30G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PA[0m[J[0;90mSSWORD[0m[30G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PAS[0m[J[31G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PAS[0m[J[0;90mSWORD[0m[31G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASS[0m[J[32G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASS[0m[J[0;90mWORD[0m[32G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSW[0m[J[33G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSW[0m[J[0;90mORD[0m[33G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSWO[0m[J[34G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSWO[0m[J[0;90mRD[0m[34G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSWOR[0m[J[35G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 PASSWOR[0m[J[0;90mD[0m[35G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m[J[36G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m[J[36G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0m[J[37G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0m[J[0;90mNULL[0m[37G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m '[0m[J[38G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m''[0m[J[38G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'a'[0m[J[39G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'a'[0m[J[39G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aa'[0m[J[40G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aa'[0m[J[40G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[41G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[41G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[42G
+[KStatus: PRECONDITION_FAILED
+Issues: 
+<main>: Error: Password is too short, code: 2029
+[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[1Gdefault> [0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[42G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J
+                                         [0;90mLOGIN[0m
+                                         [0;90mHASH[0m
+                                         [0;90mPASSWORD[0m
+                                         [0;90mENCRYPTED[0m[4A[42G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[41G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaa'[0m[J[41G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaa'[0m[J[42G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaa'[0m[J[42G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaa'[0m[J[43G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaa'[0m[J[44G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaa'[0m[J[45G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaa'[0m[J[46G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaa'[0m[J[47G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaa'[0m[J[48G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaa'[0m[J[49G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaa'[0m[J[50G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[51G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[51G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J
+                                                   [0;90mLOGIN[0m
+                                                   [0;90mHASH[0m
+                                                   [0;90mPASSWORD[0m
+                                                   [0;90mENCRYPTED[0m[4A[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[52G
+[KStatus: PRECONDITION_FAILED
+Issues: 
+<main>: Error: Incorrect password format: should contain at least 1 upper case character, should contain at least 1 number, should contain at least 1 special character, code: 2029
+[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[1Gdefault> [0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J
+                                                   [0;90mLOGIN[0m
+                                                   [0;90mHASH[0m
+                                                   [0;90mPASSWORD[0m
+                                                   [0;90mENCRYPTED[0m[4A[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[51G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaa'[0m[J[51G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J
+                                                    [0;90mLOGIN[0m
+                                                    [0;90mHASH[0m
+                                                    [0;90mPASSWORD[0m
+                                                    [0;90mENCRYPTED[0m[4A[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[53G
+[KStatus: PRECONDITION_FAILED
+Issues: 
+<main>: Error: Incorrect password format: should contain at least 1 number, should contain at least 1 special character, code: 2029
+[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[1Gdefault> [0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J
+                                                    [0;90mLOGIN[0m
+                                                    [0;90mHASH[0m
+                                                    [0;90mPASSWORD[0m
+                                                    [0;90mENCRYPTED[0m[4A[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaAB'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaAB'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA'[0m[J[52G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[54G
+[KStatus: PRECONDITION_FAILED
+Issues: 
+<main>: Error: Incorrect password format: should contain at least 1 special character, code: 2029
+[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[1Gdefault> [0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[54G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J
+                                                     [0;90mLOGIN[0m
+                                                     [0;90mHASH[0m
+                                                     [0;90mPASSWORD[0m
+                                                     [0;90mENCRYPTED[0m[4A[54G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1'[0m[J[53G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1!'[0m[J[54G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1!'[0m[J[54G[10G[0;22;34mCREATE[0m [0;22;34mUSER[0m test1 [0;22;34mPASSWORD[0m [0;38;5;124m'aaaaaaaaaaaaaA1!'[0m[J[55G
+[K[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G[10GD[0m[J[11G[10GD[0m[J
+         [0;90mDECLARE[0m
+         [0;90mDEFINE[0m
+         [0;90mDO[0m
+         [0;90mDROP[0m[4A[11G[10GDR[0m[J[12G[10GDR[0m[J[0;90mOP[0m[12G[10GDRO[0m[J[13G[10G[0;22;34mDROP[0m[J[14G[10G[0;22;34mDROP[0m [0m[J[15G[10G[0;22;34mDROP[0m [0m[J
+              [0;90mGROUP[0m
+              [0;90mTABLE[0m
+              [0;90mTOPIC[0m
+              [0;90mUSER[0m[4A[15G[10G[0;22;34mDROP[0m U[0m[J[16G[10G[0;22;34mDROP[0m U[0m[J[0;90mSER[0m[16G[10G[0;22;34mDROP[0m US[0m[J[17G[10G[0;22;34mDROP[0m US[0m[J[0;90mER[0m[17G[10G[0;22;34mDROP[0m [0;22;34mUSE[0m[J[18G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m[J[19G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m[J[19G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m [0m[J[20G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m [0m[J[0;90mIF EXISTS[0m[20G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m t[0m[J[21G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m te[0m[J[22G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m te[0m[J[22G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m tes[0m[J[23G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m tes[0m[J[23G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m test[0m[J[24G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m test[0m[J[24G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m test1[0m[J[25G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m test1[0m[J[25G[10G[0;22;34mDROP[0m [0;22;34mUSER[0m test1[0m[J[25G
+[K[1Gdefault> [10G[0m[J
+         [0;90mSELECT[0m
+         [0;90mPRAGMA[0m
+         [0;90mFROM[0m
+         [0;90mINSERT[0m[4A[10G
+[1G[JBye
+[?2004l[?2004h[[1;32muser@yandex-client-1[m 28][33;1m$ [m[?2004l
+exit
+
+Script done on 2026-03-24 17:26:45+03:00 [COMMAND_EXIT_CODE="0"]
