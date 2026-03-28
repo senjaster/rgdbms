@@ -103,7 +103,7 @@ comment "Размножим строки еще раз (110 * 10 = 1100 стро
 run "ydb -p default sql -s '
 REPLACE INTO auto_partition_demo (id, payload)
 SELECT 
-    t1.id * 10 + t2.id as id, t1.payload as payload
+    unwrap(t1.id * 10 + t2.id) as id, t1.payload as payload
 FROM auto_partition_demo AS t1
 CROSS JOIN (SELECT * FROM auto_partition_demo WHERE id <= 10) AS t2
 '"
