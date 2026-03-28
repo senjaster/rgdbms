@@ -101,10 +101,8 @@ ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/t
 
 header "КРИТЕРИЙ 37: Поддержка ролевой (RBAC) модели управления доступом"
 
-comment "YDB поддерживает ролевую модель управления доступом (RBAC)."
-comment "Права назначаются группам (ролям), а пользователи добавляются в группы."
-comment ""
-
+comment "YDB позволяет создавать группы и допбавлять в них пользователей."
+comment "Пользователи получают все права, назначеные группам, в которые они входят"
 pause
 
 # Очистка
@@ -144,7 +142,7 @@ comment "Назначим права группам:"
 
 run "ydb -p default sql -s 'GRANT SELECT ON \`/Root/database/folder1/subfolder2/test_table\` TO GROUP readers'"
 
-run "ydb -p default sql -s 'GRANT SELECT, INSERT, UPDATE ON \`/Root/database/folder1/subfolder2/test_table\` TO GROUP writers'"
+run "ydb -p default sql -s 'GRANT SELECT, INSERT ON \`/Root/database/folder1/subfolder2/test_table\` TO GROUP writers'"
 
 pause
 
