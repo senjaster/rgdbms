@@ -22,6 +22,9 @@ pause
 less -p hosts:  ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 less -p  mirror-3-dc  ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 
+comment "Для примера посмотрим, как узлы кластера видят друг друга"
+link "https://10.40.13.21:8765/actors/interconnect/overview"
+
 # ============================================
 # КРИТЕРИЙ 56: Возможность проксирования запросов на активный узел
 # ============================================
@@ -35,14 +38,28 @@ comment "Этот процесс называется discovery."
 pause
 
 run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2135 discovery list"
-comment "Обратитие внимание, что подключаемся мы к проту 2135 а discovery вернул нам 2137"
+comment "Обратите внимание, что подключаемся мы к порту 2135 а discovery вернул нам 2137"
 pause
+
 comment "Остановим один из узлов обработки данных"
 run "ssh yandex-ydb-1 sudo systemctl stop ydbd-database-a"
 pause
+
 comment "Выполним discovery еще раз"
 run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2135 discovery list"
 comment "Теперь хорошо видно, что обращаемся мы к одному хосту, а база данных обслуживается другими"
+pause
+
+comment "Запустим запрос в фоновом режиме, подключаясь к yandex-ydb-1:"
+run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2135 sql -s \"SELECT count(*) FROM item i1 CROSS JOIN item i2\" &"
+pause
+
+comment "Проверим с помощью netstat, к какому хосту установлено соединение:"
+run "netstat -an | grep :2137"
+pause
+
+comment "Остановим фоновый процесс:"
+run "pkill -f \"SELECT count.*FROM item\""
 pause
 
 
