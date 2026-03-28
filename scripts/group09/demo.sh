@@ -140,9 +140,9 @@ pause
 
 comment "Назначим права группам:"
 
-run "ydb -p default sql -s 'GRANT SELECT ON \`/Root/database/folder1/subfolder2/test_table\` TO GROUP readers'"
+run "ydb -p default sql -s 'GRANT SELECT ON \`/Root/database/folder1/subfolder2/test_table\` TO readers'"
 
-run "ydb -p default sql -s 'GRANT SELECT, INSERT ON \`/Root/database/folder1/subfolder2/test_table\` TO GROUP writers'"
+run "ydb -p default sql -s 'GRANT SELECT, INSERT ON \`/Root/database/folder1/subfolder2/test_table\` TO writers'"
 
 pause
 
@@ -201,9 +201,9 @@ pause
 comment "Вложенные роли (группа в группе):"
 comment "Создаем группу allusers, которая включает группы readers и writers:"
 
-run "ydb -p default sql -s 'ALTER GROUP allusers ADD GROUP readers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD readers'"
 
-run "ydb -p default sql -s 'ALTER GROUP allusers ADD GROUP writers'"
+run "ydb -p default sql -s 'ALTER GROUP allusers ADD writers'"
 
 comment "Добавляем testuser3 в группу allusers:"
 
@@ -229,8 +229,8 @@ comment ""
 pause
 
 # Очистка
-ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM GROUP readers' 2>/dev/null
-ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM GROUP writers' 2>/dev/null
+ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM readers' 2>/dev/null
+ydb -p default sql -s 'REVOKE ALL ON `/Root/database/folder1/subfolder2/test_table` FROM writers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS allusers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS readers' 2>/dev/null
 ydb -p default sql -s 'DROP GROUP IF EXISTS writers' 2>/dev/null
