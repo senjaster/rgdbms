@@ -27,23 +27,23 @@ pause
 # Очистка
 ydb -p default --user root sql -s "DROP USER IF EXISTS testaudit" 2>/dev/null
 ydb -p default --user root sql -s "DROP TABLE IF EXISTS testaudit_table" 2>/dev/null
-ydb -p default --user root sql -s "DROP GROUP IF EXISTS testgroup" 2>/dev/null
+ydb -p default --user root sql -s "DROP GROUP IF EXISTS testauditgroup" 2>/dev/null
 
 run "ydb -p default --user root sql -s \"CREATE USER testaudit PASSWORD 'PASSw0rd!!!'\""
 
-run "ydb -p default --user root sql -s \"CREATE GROUP testgroup\""
+run "ydb -p default --user root sql -s \"CREATE GROUP testauditgroup\""
 
-run "ydb -p default --user root sql -s \"ALTER GROUP testgroup ADD USER testaudit\""
+run "ydb -p default --user root sql -s \"ALTER GROUP testauditgroup ADD USER testaudit\""
 
 run "ydb -p default --user root sql -s \"CREATE TABLE testaudit_table (id Int32, name Utf8, PRIMARY KEY (id))\""
 
-run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`testaudit_table\\\` TO testgroup\""
+run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`\Root\database\testaudit_table\\\` TO testauditgroup\""
 
-run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`testaudit_table\\\` FROM testgroup\""
+run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`\Root\database\testaudit_table\\\` FROM testauditgroup\""
 
 run "ydb -p default --user root sql -s \"DROP TABLE testaudit_table\""
 
-run "ydb -p default --user root sql -s \"DROP GROUP testgroup\""
+run "ydb -p default --user root sql -s \"DROP GROUP testauditgroup\""
 
 run "ydb -p default --user root sql -s \"DROP USER testaudit\""
 
@@ -68,10 +68,20 @@ comment ""
 comment "Посмотрим что внутри:"
 pause
 
-run "for node in yandex-ydb-1 yandex-ydb-2 yandex-ydb-3; do
-    ssh user@\$node sudo cat /var/log/ydb/ydb-audit-storage.log 2>/dev/null
-    ssh user@\$node sudo cat /var/log/ydb/ydb-audit-db.log 2>/dev/null
-done | sort"
+TMPFILE=$(mktemp /tmp/ydb-audit.XXXXXX)
+
+comment "Собираем логи со всех узлов во временный файл..."
+
+for node in yandex-ydb-1 yandex-ydb-2 yandex-ydb-3; do
+    ssh user@$node sudo cat /var/log/ydb/ydb-audit-storage.log 2>/dev/null
+    ssh user@$node sudo cat /var/log/ydb/ydb-audit-db.log 2>/dev/null
+done | sort > "$TMPFILE"
+
+pause
+
+less -p testaudit "$TMPFILE"
+
+rm -f "$TMPFILE"
 
 pause
 
