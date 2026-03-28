@@ -58,7 +58,7 @@ comment ""
 comment "Проверим с помощью netstat, к какому хосту установлено соединение:"
 pause
 
-run "netstat -a | grep :2137"
+run "netstat -antp | grep 2137"
 comment "Видно, что соединение установлено не к yandex-ydb-1"
 pkill -f "SELECT count.*FROM item"
 pause
