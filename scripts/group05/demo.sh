@@ -23,9 +23,12 @@ link "https://ydb.tech/docs/ru/security/authentication?version=v25.2#ldap"
 
 less -p ldap_authentication: ~/ydb-setup/3-nodes-mirror-3-dc/files/config.yaml
 
-run "ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --ca-file ~/ca.crt --user petrov@ldap"
+comment "Выполним запрос от имени пользователя petrov@ldap:"
+comment ""
 
 pause
+
+run "ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --ca-file ~/ca.crt --user petrov@ldap"
 
 # ============================================
 # КРИТЕРИЙ 18: Возможность интеграции графической консоли
@@ -48,20 +51,23 @@ pause
 
 header "КРИТЕРИЙ 27: Настройка ролевой модели доступа на основе групп LDAP"
 
-comment "YDB позволяет настраивать права доступа на основе групп и атрибутов пользователей из LDAP."
-comment "Демонстрация настройки ролевой модели с использованием LDAP групп:"
+comment "YDB позволяет задавать права доступа группам в которые входит пользователь в LDAP."
 comment ""
 
 pause
 
 comment "Выполним запрос от имени пользователя ivanov@ldap:"
-run ydb -p default --user ivanov@ldap sql -s "SELECT * FROM item LIMIT 10"
+run "ydb -p default --user ivanov@ldap sql -s \"SELECT * FROM item LIMIT 10\""
+pause
+
 
 comment "Теперь выдадим права группе ydb_role1 в которую он входит"
-run ydb -p default --user root sql -s 'GRANT SELECT ON `/Root/database/item` TO `cn=ydb_role1,ou=groups,dc=ydb-cluster,dc=com@ldap`'
+run "ydb -p default --user root sql -s \'GRANT SELECT ON `/Root/database/item` TO `cn=ydb_role1,ou=groups,dc=ydb-cluster,dc=com@ldap`\'"
+pause
 
 comment "Запустим запрос повторно:"
-run ydb -p default --user ivanov@ldap sql -s "SELECT * FROM item LIMIT 10"
+run "ydb -p default --user ivanov@ldap sql -s \"SELECT * FROM item LIMIT 10\""
+pause
 
 comment "По-умолчанию YDB использует группы, в которые пользователь входит непосредственно,"
 comment "однако можно включить и рекурсивный поиск групп."
