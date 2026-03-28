@@ -37,9 +37,9 @@ run "ydb -p default --user root sql -s \"ALTER GROUP auditgroup ADD USER auditus
 
 run "ydb -p default --user root sql -s \"CREATE TABLE audittable (id Int32, name Utf8, PRIMARY KEY (id))\""
 
-run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`\Root\\\\database\\\\audittable\\\` TO auditgroup\""
+run "ydb -p default --user root sql -s \"GRANT SELECT ON \\\`/Root/database/audittable\\\` TO auditgroup\""
 
-run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`\Root\\\\database\\\\audittable\\\` FROM auditgroup\""
+run "ydb -p default --user root sql -s \"REVOKE SELECT ON \\\`/Root/database/audittable\\\` FROM auditgroup\""
 
 run "ydb -p default --user root sql -s \"DROP TABLE audittable\""
 
