@@ -18,9 +18,9 @@ ssh yandex-ydb-1 sudo cat /opt/ydb/certs/node.crt | less
 
 comment "Для подключения нужно обязательно указать корневой сертификат, которым подписаны сертификаты узлов"
 comment "Обычная команда подключения:"
-comment "ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --user root --ca-file ~/ca.crt"
+comment "  ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --user root --ca-file ~/ca.crt"
 comment "Попробуем подключиться без сертификата:"
-run "ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --user petrov@ldap"
+run "ydb --endpoint grpcs://entrypoint.ydb-cluster.com:2135 -d /Root/database --user root"
 
 pause
 
