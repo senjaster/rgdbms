@@ -67,14 +67,19 @@ comment "(по умолчанию AUTO_PARTITIONING_PARTITION_SIZE_MB равен
 pause
 
 for i in 1 2 3 4; do
+    comment "==========================================================="
     comment "Итерация $i: Добавим строки с длинным payload"
     run "ydb -p default sql -s '\$maxid = SELECT max(id) FROM auto_partition_demo; INSERT INTO auto_partition_demo(id, payload) SELECT unwrap(ROW_NUMBER() OVER (ORDER BY I_ID) + COALESCE(\$maxid,0)) as id, \"AAAAAAAAAA\" as payload FROM item'"
-    comment "Проверим состояние - размер и количество партиций"
-    pause
-    
+    comment "Подождем 10 секунд"
+    sleep 10
+    comment "Проверим состояние - размер и количество партиций:"
     run "ydb -p default sql -s 'SELECT Path, count(*) as part_count, sum(RowCount) as total_rows, sum(DataSize) as total_size_bytes FROM \`.sys/partition_stats\` WHERE Path LIKE \"%auto_partition_demo%\" GROUP BY Path ORDER BY Path'"
-    
+    pause
 done
+
+
+comment "Удалим таблицу"
+pause
 
 # Очистка (без вывода)
 ydb -p default sql -s 'DROP TABLE IF EXISTS auto_partition_demo' 2>/dev/null
