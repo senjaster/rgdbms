@@ -94,20 +94,13 @@ pause
 run "ydb -p default sql -s 'SELECT SUM(value), MAX(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
 pause
 
-comment "Подождем завершения workload и проверим финальное состояние:"
+comment "Подождем завершения workload"
 
 wait $WORKLOAD_PID 2>/dev/null
 
-run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/distributed_txn/test\` ORDER BY id'"
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
-
-comment "Сумма осталась равной 200, что подтверждает корректную работу распределенных транзакций"
-
-pause
-
-comment "Удалим тестовую таблицу"
 ydb -p default sql -s 'DROP TABLE `/Root/database/distributed_txn/test`' 2>/dev/null
 
+pause
 
 # ============================================
 # КРИТЕРИЙ 55: Наличие механизма балансировки читающей нагрузки
