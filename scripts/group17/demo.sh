@@ -82,8 +82,8 @@ run "ydb -p default sql -s 'INSERT INTO cdc_demo_table (id, name, value) VALUES 
 pause
 
 comment "Теперь можно запустить consumer для чтения изменений из changefeed"
-comment "Вот команда для запуска kafka-console-consumer:"
-run "cat changefeed_consumer.sh"
+comment "Будем использовать встроеный в ydb cli консьюмер"
+run "cat changefeed_cons_ydb.sh"
 comment ""
 comment "Запустим его в отдельной сессии, чтобы увидеть изменения в реальном времени"
 
