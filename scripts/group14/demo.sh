@@ -13,12 +13,15 @@ comment ""
 comment "В кластере YDB существует два типа процессов:"
 comment "  - Процессы хранения: читают и пишут данные на локальные диски. Не кэшируют и не отвечают на запросы"
 comment "  - Процессы баз данных: кэшируют данные, обслуживают пользовательские запросы, никогда не взаимодействуют с дисками"
-comment ""
-
-run "sudo systemctl --no-pager status ydbd-*"
-
 link "https://10.40.13.21:8765/monitoring/cluster/nodes"
 link "https://ydb.tech/docs/ru/concepts/architecture?version=v25.2#ydb-architecture"
+comment ""
+comment "Посмотрим какие процессы запущены на yandex-ydb-1"
+pause
+
+ssh yandex-ydb-1 sudo systemctl --no-pager status ydbd-* | less
+
+pause
 
 header "КРИТЕРИЙ 69: Наличие возможности добавить узлы, отвечающие только за выполнение запросов
 КРИТЕРИЙ 70: Эластичность: наличие механизмов, позволяющих динамически добавлять и исключать узлы из кластера в зависимости от нагрузки"
