@@ -149,6 +149,12 @@ run "ydb -p default operation list export/s3"
 
 pause
 
+comment "Проверим содержимое S3 бакета:"
+
+run "mcmc ls ydb-backup/$S3_EXPORT_PREFIX/both_tables/"
+
+pause
+
 comment "Удалим таблицы для демонстрации восстановления:"
 
 run "ydb -p default sql -s 'DROP TABLE \`/Root/database/folder1/subfolder2/customers\`'"
@@ -237,3 +243,8 @@ pause
 ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/restored_data/customers_copy`' 2>/dev/null
 ydb -p default operation list export/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
 ydb -p default operation list import/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
+
+# Очистка резервных копий
+rm -rf ./backup_demo 2>/dev/null
+rm -rf ./backup_demo_schema 2>/dev/null
+rm -rf ./backup_demo_table_consistency 2>/dev/null
