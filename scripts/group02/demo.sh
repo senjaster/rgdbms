@@ -13,7 +13,7 @@ ydb -p default sql -s 'DROP TABLE IF EXISTS `compression/oorder_compression_lz4`
 
 header "КРИТЕРИЙ 6: Возможность сжатия данных на уровне хранения"
 
-comment "YDB поддерживает сжатие данных на уровне хранения. Доступны алгоритмы сжатия lz4 и zstd."
+comment "YDB поддерживает сжатие данных в твблицах. Доступны алгоритмы сжатия lz4 и zstd."
 link "https://ydb.tech/docs/ru/yql/reference/syntax/create_table/family?version=v25.2"
 
 pause
