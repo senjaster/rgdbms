@@ -104,12 +104,6 @@ run "ydb -p default sql -s 'DELETE FROM cdc_demo_table WHERE id = 2'"
 
 pause
 
-comment "Все эти изменения будут видны в consumer, который читает changefeed"
-comment "Посмотрим состояние changefeed в WebUI"
-link "https://10.40.13.21:8765/"
-
-pause
-
 # Очистка (без вывода)
 ydb -p default sql -s 'DROP TABLE IF EXISTS cdc_demo_table' 2>/dev/null
 ydb -p default topic consumer drop --consumer demo-consumer demo-topic 2>/dev/null
