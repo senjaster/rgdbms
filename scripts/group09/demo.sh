@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 header "КРИТЕРИЙ 36: Поддержка дискреционной (DAC) модели управления доступом"
 
 comment "YDB поддерживает обычную модель разрешений, выдаваемых пользователям на объекты в БД"
+link "https://ydb.tech/docs/ru/yql/reference/syntax/grant?version=v25.2#permissions-list"
 pause
 
 # Очистка
