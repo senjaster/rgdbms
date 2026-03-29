@@ -185,16 +185,49 @@ pause
 # ============================================
 
 header "КРИТЕРИЙ 52: Восстановление из резервной копии отдельной БД"
-comment "В YDB нет специального понятия "бэкап базы" - любое подмножество таблиц, принадлежащих БД"
-comment "можно включить в резервную копию. 
-comment "Как один из частныз случаев можно включить и все табилцы."
+
+comment "В YDB нет специального понятия \"бэкап базы\" - любое подмножество таблиц, принадлежащих БД,"
+comment "можно включить в резервную копию. Как один из частных случаев можно включить и все таблицы."
+comment ""
+comment "Важная особенность: можно восстановить любое подмножество таблиц из бэкапа в любую папку."
+comment "Продемонстрируем это, восстановив только одну таблицу (customers) из существующего бэкапа"
+comment "в другую папку (restored_data)."
 
 link "https://ydb.tech/docs/ru/reference/ydb-cli/export-import/tools-dump?version=v25.2"
+
+pause
+
 # Очистка (без вывода)
-ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/customers`' 2>/dev/null
-ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/folder1/subfolder2/orders`' 2>/dev/null
-rm -rf ./backup_demo 2>/dev/null
-rm -rf ./backup_demo_schema 2>/dev/null
-rm -rf ./backup_demo_table_consistency 2>/dev/null
+ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/restored_data/customers_copy`' 2>/dev/null
+
+comment "Восстановим только таблицу customers из бэкапа в новую папку restored_data:"
+comment "Обратите внимание: мы сделали бэкап двух таблиц (customers и orders), но восстанавливаем только одну"
+
+run "ydb -p default import s3 \
+  --s3-endpoint \"$S3_ENDPOINT\" \
+  --bucket \"$S3_BUCKET\" \
+  --access-key \"$S3_ACCESS_KEY\" \
+  --secret-key \"$S3_SECRET_KEY\" \
+  --item src=\"$S3_EXPORT_PREFIX/both_tables/customers\",dst=/Root/database/restored_data/customers_copy \
+
+pause
+
+comment "Проверим список операций импорта:"
+run "ydb -p default operation list import/s3"
+
+pause
+
+comment "Проверим восстановленные данные в новой папке:"
+run "ydb -p default sql -s 'SELECT * FROM \`/Root/database/restored_data/customers_copy\` LIMIT 5'"
+
+pause
+
+comment "Убедимся, что таблица orders не была восстановлена в эту папку:"
+ydb -p default sql -s 'SELECT * FROM `/Root/database/restored_data/orders`' 2>&1 || echo "Таблица orders не найдена (ожидаемо - мы восстановили только customers)"
+
+pause
+
+# Очистка (без вывода)
+ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/restored_data/customers_copy`' 2>/dev/null
 ydb -p default operation list export/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
 ydb -p default operation list import/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
