@@ -6,16 +6,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # ============================================
 # КРИТЕРИЙ 44: Наличие в поставке инструментов для построения отказоустойчивых конфигураций
 # КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер
-# КРИТЕРИЙ 60: Возможность построения active-active кластера
 # ============================================
 
 header "КРИТЕРИЙ 44: Наличие в поставке инструментов для построения отказоустойчивых конфигураций
-КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер
-КРИТЕРИЙ 60: Возможность построения active-active кластера"
+КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер"
 
 comment "YDB всегда представляет собой отказоустойчивый кластер."
-comment "Все узлы кластера являются активными (active-active), что обеспечивает высокую доступность и производительность."
-comment ""
 comment "Давайте посмотрим документацию по поддерживаемым топологиям кластера"
 link "https://ydb.tech/docs/ru/concepts/topology?version=v25.2"
 pause
@@ -43,6 +39,27 @@ pause
 
 comment "Проверим, что кластер продолжает работать несмотря на отключение узла:"
 run "ydb -p default sql -s 'SELECT count(*) FROM item'"
+
+pause
+
+comment "Проверим, что кластер доступен и на запись - создадим таблицу и запишем данные:"
+
+# Очистка (без вывода)
+ydb -p default sql -s 'DROP TABLE IF EXISTS ha_test' 2>/dev/null
+
+run "ydb -p default sql -s 'CREATE TABLE ha_test (
+    id Uint64,
+    message Utf8,
+    PRIMARY KEY (id)
+)'"
+
+run "ydb -p default sql -s 'INSERT INTO ha_test (id, message) VALUES (1, \"Кластер работает!\"), (2, \"Запись успешна!\")'"
+
+run "ydb -p default sql -s 'SELECT * FROM ha_test'"
+
+# Очистка (без вывода)
+ydb -p default sql -s 'DROP TABLE IF EXISTS ha_test' 2>/dev/null
+
 comment "Отключать второй узел уже нельзя - мы выйдем за модель отказа"
 pause
 
@@ -50,6 +67,36 @@ comment "Запустим узел обратно:"
 run "ssh yandex-ydb-2 sudo systemctl start ydbd-storage"
 run "ssh yandex-ydb-2 sudo systemctl start ydbd-database-a"
 
+pause
+
+# ============================================
+# КРИТЕРИЙ 60: Возможность построения active-active кластера
+# ============================================
+
+header "КРИТЕРИЙ 60: Возможность построения active-active кластера"
+
+comment "В YDB все узлы кластера являются активными (active-active)."
+comment "Это означает, что любой узел может обрабатывать запросы на чтение и запись."
+comment "Продемонстрируем это, подключившись к каждому узлу кластера и выполнив запрос."
+
+pause
+
+comment "Подключимся к первому узлу (yandex-ydb-1) и выполним запрос:"
+run "ydb -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+
+pause
+
+comment "Подключимся ко второму узлу (yandex-ydb-2) и выполним запрос:"
+run "ydb -e grpcs://yandex-ydb-2.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+
+pause
+
+comment "Подключимся к третьему узлу (yandex-ydb-3) и выполним запрос:"
+run "ydb -e grpcs://yandex-ydb-3.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+
+pause
+
+comment "Как видно, все узлы активны и могут обрабатывать запросы независимо друг от друга."
 pause
 
 # ============================================
