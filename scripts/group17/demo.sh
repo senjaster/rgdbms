@@ -27,7 +27,7 @@ pause
 comment "Проверим что получилось:"
 run "ydb -p default scheme describe demo-topic"
 comment "Топики можно посмотреть и в WebUI"
-link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&diagnosticsTab=topicData&database=%2FRoot%2Fdatabase&schema=%2FRoot%2Fdatabase%2Fdemo-topic&selectedPartition=0"
+link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&diagnosticsTab=overview&database=%2FRoot%2Fdatabase&schema=%2FRoot%2Fdatabase%2Fdemo-topic"
 
 pause
 
@@ -40,12 +40,6 @@ comment "А вот - для kafka-console-consumer:"
 run "cat topic_consumer.sh" 
 comment "Запустим их в отдельной сессии чтобы посмотреть как они работают"
 pause
-
-
-# Очистка 
-run "ydb -p default topic consumer drop --consumer demo-consumer demo-topic"
-run "ydb -p default topic drop demo-topic"
-
 
 #####################
 # Демо changefeed
@@ -73,11 +67,11 @@ pause
 
 comment "Настроим на таблицу CHANGEFEED с режимом UPDATES и форматом JSON"
 run "ydb -p default sql -s 'ALTER TABLE cdc_demo_table ADD CHANGEFEED cdc_demo_feed WITH (MODE=\"UPDATES\", FORMAT=\"JSON\")'"
-
 pause
 
 comment "Посмотрим описание таблицы с changefeed"
 run "ydb -p default scheme describe cdc_demo_table"
+link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&diagnosticsTab=overview&database=%2FRoot%2Fdatabase&schema=%2FRoot%2Fdatabase%2Fcdc_demo_table%2Fcdc_demo_feed&selectedPartition=0"
 
 pause
 
@@ -111,9 +105,11 @@ pause
 
 comment "Все эти изменения будут видны в consumer, который читает changefeed"
 comment "Посмотрим состояние changefeed в WebUI"
-link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&diagnosticsTab=topicData&database=%2FRoot%2Fdatabase&schema=%2FRoot%2Fdatabase%2Fcdc_demo_feed&selectedPartition=0"
+link "https://10.40.13.21:8765/"
 
 pause
 
 # Очистка (без вывода)
 ydb -p default sql -s 'DROP TABLE IF EXISTS cdc_demo_table' 2>/dev/null
+ydb -p default topic consumer drop --consumer demo-consumer demo-topic 2>/dev/null
+ydb -p default topic drop demo-topic 2>/dev/null
