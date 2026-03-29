@@ -77,26 +77,42 @@ header "КРИТЕРИЙ 60: Возможность построения active-
 
 comment "В YDB все узлы кластера являются активными (active-active)."
 comment "Это означает, что любой узел может обрабатывать запросы на чтение и запись."
-comment "Продемонстрируем это, подключившись к каждому узлу кластера и выполнив запрос."
+comment "Продемонстрируем это, создав таблицу и записав данные через разные узлы кластера."
 
 pause
 
-comment "Подключимся к первому узлу (yandex-ydb-1) и выполним запрос:"
-run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+# Очистка (без вывода)
+ydb -p default sql -s 'DROP TABLE IF EXISTS active_active_test' 2>/dev/null
+
+comment "Создадим таблицу через первый узел (yandex-ydb-1):"
+run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'CREATE TABLE active_active_test (
+    id Uint64,
+    node_name Utf8,
+    message Utf8,
+    PRIMARY KEY (id)
+)'"
 
 pause
 
-comment "Подключимся ко второму узлу (yandex-ydb-2) и выполним запрос:"
-run "ydb -p default -e grpcs://yandex-ydb-2.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+comment "Запишем первую строку через первый узел (yandex-ydb-1):"
+run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'INSERT INTO active_active_test (id, node_name, message) VALUES (1, \"yandex-ydb-1\", \"Запись через узел 1\")'"
+
+comment "Запишем вторую строку через второй узел (yandex-ydb-2):"
+run "ydb -p default -e grpcs://yandex-ydb-2.ydb-cluster.com:2137 sql -s 'INSERT INTO active_active_test (id, node_name, message) VALUES (2, \"yandex-ydb-2\", \"Запись через узел 2\")'"
+
+comment "Запишем третью строку через третий узел (yandex-ydb-3):"
+run "ydb -p default -e grpcs://yandex-ydb-3.ydb-cluster.com:2137 sql -s 'INSERT INTO active_active_test (id, node_name, message) VALUES (3, \"yandex-ydb-3\", \"Запись через узел 3\")'"
 
 pause
 
-comment "Подключимся к третьему узлу (yandex-ydb-3) и выполним запрос:"
-run "ydb -p default -e grpcs://yandex-ydb-3.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+comment "Прочитаем все данные, чтобы убедиться, что все записи успешно сохранены:"
+run "ydb -p default sql -s 'SELECT * FROM active_active_test ORDER BY id'"
 
-pause
+comment "Как видно, все узлы активны и могут обрабатывать запросы на запись."
 
-comment "Как видно, все узлы активны и могут обрабатывать запросы независимо друг от друга."
+# Очистка (без вывода)
+ydb -p default sql -s 'DROP TABLE IF EXISTS active_active_test' 2>/dev/null
+
 pause
 
 # ============================================
