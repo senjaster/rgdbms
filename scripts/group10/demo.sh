@@ -179,17 +179,3 @@ pause
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
 run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
 run "ydb -p default -d /Root sql -s 'SELECT NodeId, Host FROM \`.sys/nodes\`'"
-
-
-comment "Давайте посмотрим, как это выглядит на практике:"
-comment "Запустим тест tpc-c, встроеный в YDB"
-pause
-
-ydb -p default -e grpcs://entrypoint.ydb-cluster.com workload tpcc run -w 100
-
-comment "Запустим обратно остановленный узел"
-
-pause
-
-run "ssh yandex-ydb-1 sudo systemctl start ydbd-storage"
-run "ssh yandex-ydb-1 sudo systemctl start ydbd-database-a"
