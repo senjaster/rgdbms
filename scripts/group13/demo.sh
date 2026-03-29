@@ -50,14 +50,6 @@ run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/dis
 
 pause
 
-comment "Проверим, что строки находятся в разных партициях и на разных узлах:"
-
-run "ydb -p default sql -s 'SELECT PartIdx, RowCount, NodeId
-FROM \`.sys/partition_stats\`
-WHERE Path LIKE \"%distributed_txn%\"'"
-
-pause
-
 comment "Запустим в фоне многоузловые транзакции с помощью ydb-bench:"
 comment "Каждая транзакция будет увеличивать значение в строке 10 на 1 и уменьшать в строке 30 на 1"
 comment "Сумма должна оставаться неизменной (200), что подтверждает атомарность транзакций"
