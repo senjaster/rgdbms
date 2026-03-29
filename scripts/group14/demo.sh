@@ -19,7 +19,7 @@ comment ""
 comment "Посмотрим какие процессы запущены на yandex-ydb-1"
 pause
 
-ssh yandex-ydb-1 sudo systemctl --no-pager status ydbd-* | less
+run "ssh yandex-ydb-1 sudo systemctl --no-pager status ydbd-* --lines=0"
 
 pause
 
