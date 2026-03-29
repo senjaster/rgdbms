@@ -143,6 +143,8 @@ comment "поэтому в ydb есть понятие фоновых опера
 comment ""
 comment "Получим список операций экспорта:"
 
+pause
+
 run "ydb -p default operation list export/s3"
 
 pause
