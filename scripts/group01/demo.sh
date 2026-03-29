@@ -17,7 +17,7 @@ pause
 comment "Дистрибутив должен быть заранее скачан на машину, с которой производится установка:"
 run "ls -l ~/ydb-setup/ydbd*"
 comment ""
-comment "В ansible inventory нужно указать путь к заранее скачанному архиву с бинарными файлами:
+comment "В ansible inventory нужно указать путь к заранее скачанному архиву с бинарными файлами:"
 pause
 
 less -p ydb_archive: ~/ydb-setup/3-nodes-mirror-3-dc-init/inventory/50-inventory.yaml
