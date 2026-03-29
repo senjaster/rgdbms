@@ -163,6 +163,19 @@ pause
 
 header "КРИТЕРИЙ 64: Наличие механизма автоматического распределения данных по узлам"
 
-comment "TODO: Критерий не реализован"
+comment "Данные автоматически распределяются на двух уровнях:"
+comment " - Диски объединяются в пулы, после чего данные автоматически распределяются между ними"
+comment " - Кэшированные данные (таблетки) автоматически распределяются между узлами БД"
+comment ""
+pause
+comment "Посмотрим степень заполнения дисков"
+link "https://10.40.13.21:8765/monitoring/cluster/storage"
+pause 
+comment "Посмотрим распределение таблеток между узлами"
+link "https://10.40.13.21:8765/monitoring/tenant?tenantPage=diagnostics&diagnosticsTab=nodes&database=%2FRoot%2Fdatabase"
 
 pause
+
+comment "Запустим генерацию данных ydb-bench"
+
+run "ydb-bench --endpoint grpcs://entrypoint.ydb-cluster.com:2135 --database /Root/database --ca-file ~/ca.crt --user root --password \"\$YDB_PASSWORD\" --prefix-path bench --scale 1000 init"
