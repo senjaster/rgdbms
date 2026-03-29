@@ -5,11 +5,11 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ============================================
 # КРИТЕРИЙ 44: Наличие в поставке инструментов для построения отказоустойчивых конфигураций
-# КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер
+# КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер (без использования сторонних  компонентов)
 # ============================================
 
 header "КРИТЕРИЙ 44: Наличие в поставке инструментов для построения отказоустойчивых конфигураций
-КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер"
+КРИТЕРИЙ 53: Встроенный отказоустойчивый кластер (без использования сторонних  компонентов)"
 
 comment "YDB всегда представляет собой отказоустойчивый кластер."
 comment "Давайте посмотрим документацию по поддерживаемым топологиям кластера"
@@ -82,17 +82,17 @@ comment "Продемонстрируем это, подключившись к 
 pause
 
 comment "Подключимся к первому узлу (yandex-ydb-1) и выполним запрос:"
-run "ydb -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+run "ydb -p default -e grpcs://yandex-ydb-1.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
 
 pause
 
 comment "Подключимся ко второму узлу (yandex-ydb-2) и выполним запрос:"
-run "ydb -e grpcs://yandex-ydb-2.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+run "ydb -p default -e grpcs://yandex-ydb-2.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
 
 pause
 
 comment "Подключимся к третьему узлу (yandex-ydb-3) и выполним запрос:"
-run "ydb -e grpcs://yandex-ydb-3.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
+run "ydb -p default -e grpcs://yandex-ydb-3.ydb-cluster.com:2137 sql -s 'SELECT count(*) as item_count FROM item'"
 
 pause
 
