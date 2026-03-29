@@ -22,7 +22,7 @@ comment "Партиции будут разделены по ключу 20 (PART
 
 pause
 
-ydb -p default sql -s 'DROP TABLE IF EXISTS \`/Root/database/test_distributed_txn\`'
+ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/test_distributed_txn`'
 
 run "ydb -p default sql -s 'CREATE TABLE \`/Root/database/test_distributed_txn\` (
     id Uint32 NOT NULL,
