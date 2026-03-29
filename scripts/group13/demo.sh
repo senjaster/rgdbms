@@ -70,7 +70,7 @@ run "ydb-bench \
   --scale 1 \
   --prefix-path distributed_txn \
   run \
-  --jobs 1 -P 10 -T 60 \
+  --jobs 1 -P 10 -T 30 \
   --no-validate-scale \
   --file multi_partition_txn.sql &"
 
@@ -85,8 +85,13 @@ pause
 comment "Во время выполнения транзакций проверим сумму значений:"
 comment "Она должна оставаться равной 0, несмотря на параллельные изменения"
 
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
+run "ydb -p default sql -s 'SELECT SUM(value), MAX(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
+pause
 
+run "ydb -p default sql -s 'SELECT SUM(value), MAX(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
+pause
+
+run "ydb -p default sql -s 'SELECT SUM(value), MAX(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
 pause
 
 comment "Подождем завершения workload и проверим финальное состояние:"
