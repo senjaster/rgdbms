@@ -67,6 +67,7 @@ pause
 
 comment "Настроим на таблицу CHANGEFEED с режимом UPDATES и форматом JSON"
 run "ydb -p default sql -s 'ALTER TABLE cdc_demo_table ADD CHANGEFEED cdc_demo_feed WITH (MODE=\"UPDATES\", FORMAT=\"JSON\")'"
+run "ydb -p default topic consumer add --consumer demo-consumer cdc_demo_table/cdc_demo_feed"
 pause
 
 comment "Посмотрим описание таблицы с changefeed"
