@@ -22,9 +22,9 @@ comment "Партиции будут разделены по ключу 20 (PART
 
 pause
 
-ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/test_distributed_txn`'
+ydb -p default sql -s 'DROP TABLE IF EXISTS `/Root/database/distributed_txn/test`'
 
-run "ydb -p default sql -s 'CREATE TABLE \`/Root/database/test_distributed_txn\` (
+run "ydb -p default sql -s 'CREATE TABLE \`/Root/database/distributed_txn/test\` (
     id Uint32 NOT NULL,
     value Int32,
     PRIMARY KEY (id)
@@ -39,14 +39,14 @@ pause
 
 comment "Добавим две строки: одну в первую партицию (id=10), другую во вторую (id=30):"
 
-run "ydb -p default sql -s 'INSERT INTO \`/Root/database/test_distributed_txn\` (id, value) VALUES (10, 0), (30, 0)'"
+run "ydb -p default sql -s 'INSERT INTO \`/Root/database/distributed_txn/test\` (id, value) VALUES (10, 0), (30, 0)'"
 
 pause
 
 comment "Проверим начальное состояние:"
 
-run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/distributed_txn/test\` ORDER BY id'"
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
 
 pause
 
@@ -60,6 +60,7 @@ run "ydb-bench \
   --ca-file ~/ca.crt \
   --user root \
   --scale 1 \
+  --prefix-path distributed_txn \
   run --jobs 1 -P 10 -T 60 --file multi_partition_txn.sql &"
 
 WORKLOAD_PID=$!
@@ -73,7 +74,7 @@ pause
 comment "Во время выполнения транзакций проверим сумму значений:"
 comment "Она должна оставаться равной 0, несмотря на параллельные изменения"
 
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
 
 pause
 
@@ -81,15 +82,15 @@ comment "Подождем завершения workload и проверим фи
 
 wait $WORKLOAD_PID 2>/dev/null
 
-run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/test_distributed_txn\` ORDER BY id'"
-run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/test_distributed_txn\`'"
+run "ydb -p default sql -s 'SELECT id, value FROM \`/Root/database/distributed_txn/test\` ORDER BY id'"
+run "ydb -p default sql -s 'SELECT SUM(value) AS total FROM \`/Root/database/distributed_txn/test\`'"
 
 comment "Сумма осталась равной 200, что подтверждает корректную работу распределенных транзакций"
 
 pause
 
 comment "Удалим тестовую таблицу"
-ydb -p default sql -s 'DROP TABLE `/Root/database/test_distributed_txn`' 2>/dev/null
+ydb -p default sql -s 'DROP TABLE `/Root/database/distributed_txn/test`' 2>/dev/null
 
 
 # ============================================
