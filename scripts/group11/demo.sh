@@ -151,7 +151,8 @@ pause
 
 comment "Проверим содержимое S3 бакета:"
 
-run "mcmc ls ydb-backup/$S3_EXPORT_PREFIX/both_tables/"
+mcmc alias set myminio http://10.40.13.20:9000 "$S3_ACCESS_KEY" "$S3_SECRET_KEY" &>/dev/null
+run "mcmc ls -r myminio/ydb-backup/$S3_EXPORT_PREFIX/both_tables/"
 
 pause
 
