@@ -109,6 +109,10 @@ pause
 # КРИТЕРИЙ 51: Наличие в поставке инструментов, позволяющих выполнять резервное копирование и восстановление на S3
 # ============================================
 
+ydb -p default operation list export/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
+ydb -p default operation list import/s3 --format proto-json-base64 2>/dev/null | jq -r ".operations[].id" 2>/dev/null | while read line; do ydb -p default operation forget "$line" 2>/dev/null; done
+
+
 header "КРИТЕРИЙ 51: Наличие в поставке инструментов, позволяющих выполнять резервное копирование и восстановление на S3"
 comment "Поскольку YDB это как правило кластер, содержащий большой объем данных именно S3"
 comment "рассматривается как основной способ резервного копирования."
@@ -208,7 +212,7 @@ run "ydb -p default import s3 \
   --bucket \"$S3_BUCKET\" \
   --access-key \"$S3_ACCESS_KEY\" \
   --secret-key \"$S3_SECRET_KEY\" \
-  --item src=\"$S3_EXPORT_PREFIX/both_tables/customers\",dst=/Root/database/restored_data/customers_copy \
+  --item src=\"$S3_EXPORT_PREFIX/both_tables/customers\",dst=/Root/database/restored_data/customers_copy"
 
 pause
 
