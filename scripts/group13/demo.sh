@@ -69,6 +69,7 @@ run "ydb-bench \
   --user root \
   --scale 1 \
   --prefix-path distributed_txn \
+  --no-validate-scale \
   run --jobs 1 -P 10 -T 60 --file multi_partition_txn.sql &"
 
 WORKLOAD_PID=$!
