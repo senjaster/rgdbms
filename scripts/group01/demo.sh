@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 header "КРИТЕРИЙ 1: Возможность установки СУБД в закрытом контуре"
 
 comment "YDB поддерживает установку в закрытом контуре без доступа в интернету"
-comment "Для установки используется Ansible, нужно заранее загрузить и установить коллекцию ydb_platform.ydb
+comment "Для установки используется Ansible, нужно заранее загрузить и установить коллекцию ydb_platform.ydb"
 run "ansible-galaxy collection list"
 pause
 
@@ -64,7 +64,8 @@ pause
 header "КРИТЕРИЙ 3: Поддержка автоматизированного обновления между версиями"
 
 comment "YDB поддерживает автоматизированное обновление с помощью плейбуков Ansible"
-comment "Необходимо указать в inventory путь к новому дистрибутиву и запустить плейбук update_binaries"
+comment "Необходимо указать в inventory путь к новому дистрибутиву и запустить плейбук update_executable"
+less -p ydb_archive: ~/ydb-setup/3-nodes-mirror-3-dc/inventory/50-inventory.yaml
 comment ""
 comment "Демонстрация процесса обновления YDB:"
 
