@@ -1,6 +1,10 @@
-UPDATE pgbench_accounts SET abalance = abalance + $delta WHERE aid = $aid;
-SELECT abalance FROM pgbench_accounts WHERE aid = $aid;
-UPDATE pgbench_tellers SET tbalance = tbalance + $delta WHERE tid = $tid;
-UPDATE pgbench_branches SET bbalance = bbalance + $delta WHERE bid = $bid;
-INSERT INTO pgbench_history (tid, bid, aid, delta, mtime)
+UPDATE `bench/accounts` SET abalance = abalance + $delta WHERE aid = $aid;
+
+SELECT abalance FROM `bench/accounts` WHERE aid = $aid;
+
+UPDATE `bench/tellers` SET tbalance = tbalance + $delta WHERE tid = $tid;
+
+UPDATE `bench/branches` SET bbalance = bbalance + $delta WHERE bid = $bid;
+
+INSERT INTO `bench/history` (tid, bid, aid, delta, mtime)
 VALUES ($tid, $bid, $aid, $delta, CurrentUtcTimestamp());`
