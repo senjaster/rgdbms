@@ -7,4 +7,4 @@ UPDATE `bench/tellers` SET tbalance = tbalance + $delta WHERE tid = $tid;
 UPDATE `bench/branches` SET bbalance = bbalance + $delta WHERE bid = $bid;
 
 INSERT INTO `bench/history` (tid, bid, aid, delta, mtime)
-VALUES ($tid, $bid, $aid, $delta, CurrentUtcTimestamp());`
+VALUES ($tid, $bid, $aid, $delta, CurrentUtcTimestamp());
