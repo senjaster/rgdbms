@@ -7,7 +7,7 @@ ydb-bench \
     --user root \
     --prefix-path bench \
     --scale 1000 \
-    run \
+    run  -P 60 -T 300 \
     --jobs 100 \
     --processes 10 \
     --file tpcc_like.sql
