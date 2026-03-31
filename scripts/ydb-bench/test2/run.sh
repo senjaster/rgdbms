@@ -8,6 +8,6 @@ ydb-bench \
     --prefix-path bench \
     --scale 1000 \
     run -P 60 -T 300 \
-    --jobs 5 \
+    --jobs 4 \
     --processes 1 \
     --file accounts_200p.sql
